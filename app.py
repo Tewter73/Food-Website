@@ -1,14 +1,21 @@
-import os
 import streamlit as st
 import sqlite3
 
 def load_savory_foods():
-    conn = sqlite3.connect('database.db')  # แทน 'your_database.db' ด้วยชื่อฐานข้อมูลของคุณ
+    conn = sqlite3.connect('database.db')  
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name FROM อาหารคาว;")  # แทน 'อาหารคาว' ด้วยชื่อตารางของคุณ
-    savory_foods = [(row[0], row[1]) for row in cursor.fetchall()]
+    cursor.execute("SELECT name FROM อาหารคาว;")  
+    savory_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
     return savory_foods
+
+def load_sweet_foods():
+    conn = sqlite3.connect('database.db')  
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sweet;")  # 'sweet' คือชื่อตารางที่คุณสร้างจากไฟล์ Excel สำหรับข้อมูลเมนูหวาน
+    sweet_foods = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return sweet_foods
 
 def main():
     st.title('วันนี้กินไรดี')
@@ -30,17 +37,14 @@ def main():
 def show_savory_page():
     st.title('เมนูอาหารประเภทของคาว')
     savory_foods = load_savory_foods()
-    for food_id, food_name in savory_foods:
-        st.write(f"## {food_name}")
-        image_path = f"images/savory/{food_id}.jpg"
-        if os.path.isfile(image_path):
-            st.image(image_path, caption=f"รูปภาพ {food_name}", use_column_width=True)
-        else:
-            st.warning("รูปภาพยังไม่มีในระบบ")
+    for food in savory_foods:
+        st.write(food)
 
 def show_sweet_page():
     st.title('เมนูอาหารประเภทของหวาน')
-    # เพิ่มโค้ดเพื่อแสดงเมนูอาหารของหวานที่คุณต้องการ
+    sweet_foods = load_sweet_foods()
+    for food in sweet_foods:
+        st.write(food)
 
 if __name__ == '__main__':
     main()
