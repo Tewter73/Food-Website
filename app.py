@@ -40,9 +40,9 @@ def get_additional_info(food_id, category):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute(f"SELECT additional_info FROM {category} WHERE id = ?;", (food_id,))
-    additional_info = cursor.fetchone()[0]
+    additional_info = cursor.fetchone()
     conn.close()
-    return additional_info
+    return additional_info[0] if additional_info else None
 
 def main():
     st.title('วันนี้กินไรดี')
@@ -54,10 +54,12 @@ def main():
 
     # ตรวจสอบเงื่อนไขและแสดงข้อความที่เลือก
     if food_type == "อาหารประเภทของคาว":
-        show_savory_page()
+        if st.button("ยืนยัน"):
+            show_savory_page()
 
     elif food_type == "อาหารประเภทของหวาน":
-        show_sweet_page()
+        if st.button("ยืนยัน"):
+            show_sweet_page()
 
 def show_image_and_nutrition(food_id, food_name, category):
     # โหลดรูปภาพจากโฟลเดอร์ images/category/
@@ -79,8 +81,9 @@ def show_image_and_nutrition(food_id, food_name, category):
 
         # แสดงข้อมูลเพิ่มเติมจากฐานข้อมูล
         additional_info = get_additional_info(food_id, category)
-        st.write('**ข้อมูลเพิ่มเติม:**')
-        st.write(additional_info)
+        if additional_info is not None:
+            st.write('**ข้อมูลเพิ่มเติม:**')
+            st.write(additional_info)
 
     except FileNotFoundError:
         st.warning(f'ไม่พบรูปภาพสำหรับ {food_name}')
