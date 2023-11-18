@@ -1,7 +1,7 @@
 import sqlite3
 
 def display_table_data(table_name):
-    conn = sqlite3.connect('Database.db')  
+    conn = sqlite3.connect('database.db')  
     cursor = conn.cursor()
 
     # ดึงข้อมูลจากตาราง

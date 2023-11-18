@@ -3,17 +3,17 @@ import streamlit as st
 import sqlite3
 
 def load_savory_foods():
-    conn = sqlite3.connect('Database.db')  
+    conn = sqlite3.connect('database.db')  
     cursor = conn.cursor()
-    cursor.execute("SELECT name FROM Savory;")  
+    cursor.execute("SELECT name FROM savory;")  
     savory_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
     return savory_foods
 
 def load_sweet_foods():
-    conn = sqlite3.connect('Database.db')  
+    conn = sqlite3.connect('database.db')  
     cursor = conn.cursor()
-    cursor.execute("SELECT name FROM Dessert;")  # 'sweet' คือชื่อตารางที่คุณสร้างจากไฟล์ Excel สำหรับข้อมูลเมนูหวาน
+    cursor.execute("SELECT name FROM dessert;")  # 'sweet' คือชื่อตารางที่คุณสร้างจากไฟล์ Excel สำหรับข้อมูลเมนูหวาน
     sweet_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
     return sweet_foods
