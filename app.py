@@ -1,3 +1,5 @@
+# ทำการ Activate Python Virtual Environment ด้วยคำสั่ง env\Scripts\activate ก่อน
+# pip freeze > requirements.txt เพื่อส่งไฟล์ให้คนอื่นimport streamlit as st
 import streamlit as st
 import sqlite3
 from PIL import Image
