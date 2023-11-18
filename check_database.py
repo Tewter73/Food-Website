@@ -17,7 +17,8 @@ def display_table_data(table_name):
     conn.close()
 
 if __name__ == '__main__':
-    table_name = 'Savory'  # แทนที่ด้วยชื่อตารางที่คุณต้องการดูข้อมูล
+    table_name = 'savory'  # แทนที่ด้วยชื่อตารางที่คุณต้องการดูข้อมูล
     display_table_data(table_name)
-    table_name = 'Dessert'
+    table_name = 'dessert'  # แทนที่ด้วยชื่อตารางที่คุณต้องการดูข้อมูล
     display_table_data(table_name)
+
