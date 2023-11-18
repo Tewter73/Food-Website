@@ -1,18 +1,19 @@
+# ทำการ Activate Python Virtual Environment ด้วยคำสั่ง env\Scripts\activate ก่อน
 import streamlit as st
 import sqlite3
 
 def load_savory_foods():
-    conn = sqlite3.connect('database.db')  
+    conn = sqlite3.connect('Database.db')  
     cursor = conn.cursor()
-    cursor.execute("SELECT name FROM อาหารคาว;")  
+    cursor.execute("SELECT name FROM Savory;")  
     savory_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
     return savory_foods
 
 def load_sweet_foods():
-    conn = sqlite3.connect('database.db')  
+    conn = sqlite3.connect('Database.db')  
     cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sweet;")  # 'sweet' คือชื่อตารางที่คุณสร้างจากไฟล์ Excel สำหรับข้อมูลเมนูหวาน
+    cursor.execute("SELECT name FROM Dessert;")  # 'sweet' คือชื่อตารางที่คุณสร้างจากไฟล์ Excel สำหรับข้อมูลเมนูหวาน
     sweet_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
     return sweet_foods
