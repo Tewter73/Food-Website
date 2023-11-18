@@ -62,12 +62,22 @@ def show_savory_page():
         st.write(food_name)
         show_image(food_id, food_name, 'savory')
 
+        # เพิ่มปุ่มดูรายละเอียดหรือคลิปเข้าไป
+        if st.button(f'ข้อมูลเพิ่มเติมสำหรับ {food_name}'):
+            # เพิ่มโค้ดที่ต้องการให้ทำงานเมื่อคลิกปุ่ม
+            st.write(f'ข้อมูลโภชนาการของ {food_name}')
+
 def show_sweet_page():
     st.title('เมนูอาหารประเภทของหวาน')
     sweet_data = load_food_data('dessert')
     for food_id, food_name in sweet_data:
         st.write(food_name)
         show_image(food_id, food_name, 'dessert')
+
+        # เพิ่มปุ่มดูรายละเอียดหรือคลิปเข้าไป
+        if st.button(f'ข้อมูลเพิ่มเติมสำหรับ {food_name}'):
+            # เพิ่มโค้ดที่ต้องการให้ทำงานเมื่อคลิกปุ่ม
+            st.write(f'ข้อมูลโภชนาการของ {food_name}')
 
 if __name__ == '__main__':
     main()
