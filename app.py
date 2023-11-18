@@ -1,6 +1,8 @@
 # ทำการ Activate Python Virtual Environment ด้วยคำสั่ง env\Scripts\activate ก่อน
 import streamlit as st
 import sqlite3
+from PIL import Image
+import io
 
 def load_savory_foods():
     conn = sqlite3.connect('database.db')  
@@ -17,6 +19,14 @@ def load_sweet_foods():
     sweet_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
     return sweet_foods
+
+def load_food_data(category):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT id, name FROM {category};")
+    food_data = cursor.fetchall()
+    conn.close()
+    return food_data
 
 def main():
     st.title('วันนี้กินไรดี')
@@ -35,17 +45,29 @@ def main():
         if st.button("ยืนยัน"):
             show_sweet_page()
 
+def show_image(food_id, food_name, category):
+    # โหลดรูปภาพจากโฟลเดอร์ images/category/
+    image_path = f'images/{category}_images/{food_id}.jpg'
+    
+    try:
+        img = Image.open(image_path)
+        st.image(img, caption=f'รูปภาพของ {food_name}', use_column_width=True)
+    except FileNotFoundError:
+        st.warning(f'ไม่พบรูปภาพสำหรับ {food_name}')
+
 def show_savory_page():
     st.title('เมนูอาหารประเภทของคาว')
-    savory_foods = load_savory_foods()
-    for food in savory_foods:
-        st.write(food)
+    savory_data = load_food_data('savory')
+    for food_id, food_name in savory_data:
+        st.write(food_name)
+        show_image(food_id, food_name, 'savory')
 
 def show_sweet_page():
     st.title('เมนูอาหารประเภทของหวาน')
-    sweet_foods = load_sweet_foods()
-    for food in sweet_foods:
-        st.write(food)
+    sweet_data = load_food_data('dessert')
+    for food_id, food_name in sweet_data:
+        st.write(food_name)
+        show_image(food_id, food_name, 'dessert')
 
 if __name__ == '__main__':
     main()
