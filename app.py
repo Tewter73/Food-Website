@@ -4,6 +4,7 @@ import streamlit as st
 import sqlite3
 from PIL import Image
 import io
+import random
 
 def load_savory_foods():
     conn = sqlite3.connect('database.db')  
@@ -13,13 +14,14 @@ def load_savory_foods():
     conn.close()
     return savory_foods
 
-def load_sweet_foods():
+def load_dessert_foods():
     conn = sqlite3.connect('database.db')  
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM dessert;")  
-    sweet_foods = [row[0] for row in cursor.fetchall()]
+    dessert_foods = [row[0] for row in cursor.fetchall()]
     conn.close()
-    return sweet_foods
+    return dessert_foods
+
 
 def load_food_data(category):
     conn = sqlite3.connect('database.db')
@@ -44,23 +46,6 @@ def get_additional_info(food_id, category):
     additional_info = cursor.fetchone()
     conn.close()
     return additional_info[0] if additional_info else None
-
-def main():
-    st.title('วันนี้กินไรดี')
-    st.subheader('เว็บไซต์สำหรับค้นหาอาหารไทยตามความต้องการของผู้ใช้งาน')
-    st.subheader('โปรดเลือกประเภทอาหารที่ท่านสนใจ')
-
-    # สร้างเลือกประเภทอาหาร
-    food_type = st.radio("เลือกประเภทอาหาร", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
-
-    # ตรวจสอบเงื่อนไขและแสดงข้อความที่เลือก
-    if food_type == "อาหารประเภทของคาว":
-        if st.button("ยืนยัน"):
-            show_savory_page()
-
-    elif food_type == "อาหารประเภทของหวาน":
-        if st.button("ยืนยัน"):
-            show_sweet_page()
 
 def show_image_and_nutrition(food_id, food_name, category):
     # โหลดรูปภาพจากโฟลเดอร์ images/category/
@@ -89,6 +74,48 @@ def show_image_and_nutrition(food_id, food_name, category):
     except FileNotFoundError:
         st.warning(f'ไม่พบรูปภาพสำหรับ {food_name}')
 
+def random_food(category):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT id, name FROM {category};")
+    dessert_data = cursor.fetchall()
+    conn.close()
+
+    if not dessert_data:
+        return None
+
+    food_id, food_name = random.choice(dessert_data)
+    return food_id, food_name
+
+
+def main():
+    st.title('วันนี้กินไรดี')
+    st.subheader('เว็บไซต์สำหรับค้นหาอาหารไทยตามความต้องการของผู้ใช้งาน')
+    st.subheader('โปรดเลือกประเภทอาหารที่ท่านสนใจ')
+
+    # สร้างเลือกประเภทอาหาร
+    food_type = st.radio("เลือกประเภทอาหาร", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
+
+    # ตรวจสอบเงื่อนไขและแสดงข้อความที่เลือก
+    if food_type == "อาหารประเภทของคาว":
+        if st.button("ยืนยัน"):
+            show_savory_page()
+
+    elif food_type == "อาหารประเภทของหวาน":
+        if st.button("ยืนยัน"):
+            show_dessert_page()
+
+    random_button = st.button("สุ่มอาหาร")
+    if random_button:
+        if food_type == "อาหารประเภทของคาว":
+            food_id, food_name = random_food('savory')
+        elif food_type == "อาหารประเภทของหวาน":
+            food_id, food_name = random_food('dessert')
+
+        if food_id and food_name:
+            st.success(f'อาหารที่สุ่มได้: {food_name}')
+            show_image_and_nutrition(food_id, food_name, food_type.lower())
+
 def show_savory_page():
     st.title('เมนูอาหารประเภทของคาว')
     savory_data = load_food_data_with_nutrition('savory')
@@ -96,7 +123,7 @@ def show_savory_page():
         st.write(food_name)
         show_image_and_nutrition(food_id, food_name, 'savory')
 
-def show_sweet_page():
+def show_dessert_page():
     st.title('เมนูอาหารประเภทของหวาน')
     sweet_data = load_food_data_with_nutrition('dessert')
     for food_id, food_name, kcal, protein, fat, carbohydrate in sweet_data:
