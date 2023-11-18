@@ -1,10 +1,10 @@
 import sqlite3
 
-# สร้างหรือเปิดฐานข้อมูล SQLite
+# เชื่อมต่อฐานข้อมูล SQLite3
 database_path = 'database.db'
 conn = sqlite3.connect(database_path)
 
-# สร้าง cursor เพื่อทำการ execute SQL statements
+# สร้าง cursor เพื่อที่จะ execute SQL statements
 cursor = conn.cursor()
 
 # เพิ่มคอลัมน์ additional_info ในตาราง savory
