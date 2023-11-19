@@ -15,7 +15,7 @@ st.set_page_config(
 st.sidebar.title("วันนี้กินไรดี")
 st.sidebar.subheader("โปรดเลือก : ")
 
-selected_page = st.sidebar.selectbox("ไปยัง", ["หน้าหลัก", "ค้นหาเมนูอาหารทั้งหมด", "เลือกอาหารตามความชอบ", "สุ่มอาหาร"])
+selected_page = st.sidebar.selectbox("ไปยัง", ["หน้าหลัก", "ค้นหาเมนูอาหารทั้งหมด", "สุ่มอาหาร"])
 
 def load_savory_foods():
     global conn, cursor
@@ -50,8 +50,7 @@ def show_image_and_nutrition(food_id, food_name, category):
 
     try:
         img = Image.open(image_path)
-        st.image(img, caption=f'รูปภาพของ {food_name}', use_column_width=True)
-
+        st.image(img, caption= None, use_column_width=True)
         # แสดงข้อมูลโภชนาการ
         food_data = load_food_data_with_nutrition(category)
         for id, name, kcal, protein, fat, carbohydrate in food_data:
@@ -134,7 +133,5 @@ if selected_page == "หน้าหลัก":
     home_page()
 elif selected_page == "ค้นหาเมนูอาหารทั้งหมด":
     search_recipe_page()
-elif selected_page == "เลือกอาหารตามความชอบ":
-    pass
 elif selected_page == "สุ่มอาหาร":
     random_recipe_page()
