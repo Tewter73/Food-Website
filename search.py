@@ -17,13 +17,26 @@ st.sidebar.subheader("โปรดเลือก : ")
 
 selected_page = st.sidebar.selectbox("ไปยัง", ["หน้าหลัก", "ค้นหาเมนูอาหารทั้งหมด", "เลือกเมนูอาหารตามโภชนาการ", "สุ่มอาหาร"])
 
-def load_food_data(category):
+def load_food_data(category, search_query=None):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute(f"SELECT id, name, kcal, protein, fat, carbohydrate FROM {category};")
+    if search_query:
+        cursor.execute(f"SELECT id, name, kcal, protein, fat, carbohydrate FROM {category} WHERE name LIKE ?;", ('%' + search_query + '%',))
+    else:
+        cursor.execute(f"SELECT id, name, kcal, protein, fat, carbohydrate FROM {category};")
     food_data = cursor.fetchall()
     conn.close()
     return food_data
+
+def show_search_result(category, search_query):
+    st.title(f'ผลลัพธ์การค้นหาสำหรับ "{search_query}"')
+    food_data = load_food_data(category, search_query)
+    if not food_data:
+        st.warning("ไม่พบเมนูอาหารที่ตรงกับคำค้นหา")
+    else:
+        for food_id, food_name, kcal, protein, fat, carbohydrate in food_data:
+            st.write(food_name)
+            show_image_and_nutrition(food_id, food_name, category)
 
 def load_food_data_with_nutrition(category):
     global conn, cursor
@@ -111,13 +124,15 @@ def home_page():
 def search_recipe_page():
     st.title("โปรดเลือกประเภทของเมนูอาหาร")
     food_type = st.radio("เลือกประเภทอาหาร", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
-    if food_type == "อาหารประเภทของคาว":
-        if st.button("ยืนยัน"):
-            show_savory_page()
-
-    elif food_type == "อาหารประเภทของหวาน":
-        if st.button("ยืนยัน"):
-            show_dessert_page()
+    search_query = st.text_input("ค้นหาชื่อเมนูอาหาร")
+    if st.button("ยืนยัน"):
+        if search_query:
+            show_search_result(food_type, search_query)
+        else:
+            if food_type == "อาหารประเภทของคาว":
+                show_savory_page()
+            elif food_type == "อาหารประเภทของหวาน":
+                show_dessert_page()
 
 def nutritional_recipe_page():
     st.title("โปรดเลือกประเภทของเมนูอาหาร")
