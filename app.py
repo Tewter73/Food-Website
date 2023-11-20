@@ -1,5 +1,3 @@
-# ทำการ Activate Python Virtual Environment ด้วยคำสั่ง env\Scripts\activate ก่อน
-# pip freeze > requirements.txt เพื่อส่งไฟล์ให้คนอื่นimport streamlit as st
 import streamlit as st
 import sqlite3
 from PIL import Image
@@ -15,15 +13,23 @@ st.set_page_config(
 st.sidebar.title("วันนี้กินไรดี")
 st.sidebar.subheader("โปรดเลือก : ")
 
-selected_page = st.sidebar.selectbox("ไปยัง", ["หน้าหลัก", "ค้นหาเมนูอาหารทั้งหมด", "เลือกเมนูอาหารตามโภชนาการ", "สุ่มอาหาร"])
+selected_page = st.sidebar.selectbox("ไปยัง", ["หน้าหลัก", "ค้นหาเมนูอาหารทั้งหมด", "สุ่มอาหาร"])
 
-def load_food_data(category):
+def load_savory_foods(): 
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute(f"SELECT id, name, kcal, protein, fat, carbohydrate FROM {category};")
     food_data = cursor.fetchall()
     conn.close()
-    return food_data
+    return savory_foods
+
+def load_dessert_foods():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM dessert;")
+    dessert_foods = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return dessert_foods
 
 def load_food_data_with_nutrition(category):
     global conn, cursor
@@ -35,12 +41,13 @@ def load_food_data_with_nutrition(category):
     return food_data
 
 def show_image_and_nutrition(food_id, food_name, category):
+    # โหลดรูปภาพจากโฟลเดอร์ 
     image_path = f'images/{category}_images/{food_id}.jpg'
 
     try:
         img = Image.open(image_path)
         st.image(img, caption= None, use_column_width=True)
-        food_data = load_food_data(category)
+        food_data = load_food_data_with_nutrition(category)
         for id, name, kcal, protein, fat, carbohydrate in food_data:
             if id == food_id:
                 st.write(f'**ปริมาณพลังงาน (kcal):** {kcal}')
@@ -87,15 +94,20 @@ def show_nutritional_food_page(category, kcal, protein, fat, carbohydrate):
 def show_random_food(category):
     st.title("เมนูอาหารสำหรับคุณในมือนี้ ก็คือ!!!")
 
+    # โหลดข้อมูลอาหารจากฐานข้อมูล
     food_data = load_food_data_with_nutrition(category)
 
+    # สุ่มเลือกเมนู
     random_food = random.choice(food_data)
 
+    # แสดงข้อมูลเมนู
     food_id, food_name, _, _, _, _ = random_food
     st.header((food_name))
 
+    # แสดงรูปภาพและข้อมูลโภชนาการ
     show_image_and_nutrition(food_id, food_name, category)
 
+#ในส่วนของหน้า page ต่างๆ
 def home_page():
     st.title("หน้าหลัก")
     st.header("เกี่ยวกับเว็บไซต์ของเรา")
@@ -150,11 +162,10 @@ def random_recipe_page():
         if st.button("สุ่มเมนู"):
             show_random_food('dessert')
 
+# แก้ไขเงื่อนไขเพื่อให้ search_and_tags ทำงานร่วมกับหน้าเว็บ
 if selected_page == "หน้าหลัก":
     home_page()
 elif selected_page == "ค้นหาเมนูอาหารทั้งหมด":
     search_recipe_page()
-elif selected_page == "เลือกเมนูอาหารตามโภชนาการ":
-    nutritional_recipe_page()
 elif selected_page == "สุ่มอาหาร":
     random_recipe_page()
