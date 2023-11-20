@@ -43,7 +43,7 @@ def load_food_data_with_nutrition(category):
     return food_data
 
 def show_image_and_nutrition(food_id, food_name, category):
-    # โหลดรูปภาพจากโฟลเดอร์ images/category/
+    # โหลดรูปภาพจากโฟลเดอร์ 
     image_path = f'images/{category}_images/{food_id}.jpg'
 
     try:
@@ -93,6 +93,7 @@ def show_random_food(category):
     # แสดงรูปภาพและข้อมูลโภชนาการ
     show_image_and_nutrition(food_id, food_name, category)
 
+#ในส่วนของหน้า page ต่างๆ
 def home_page():
     st.title("หน้าหลัก")
     st.header("เกี่ยวกับเว็บไซต์ของเรา")
