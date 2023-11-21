@@ -200,10 +200,10 @@ class FoodApp:
             category = "dessert"
 
         # แสดงช่องกรอกข้อมูลปริมาณสารอาหาร
-        kcal = st.number_input("ปริมาณพลังงานต้องมากกว่า (kcal)", min_value=0)
-        protein = st.number_input("ปริมาณโปรตีนต้องมากกว่า (g)", min_value=0)
-        fat = st.number_input("ปริมาณไขมันต้องมากกว่า (g)", min_value=0)
-        carbohydrate = st.number_input("ปริมาณคาร์โบไฮเดรตต้องมากกว่า (g)", min_value=0)
+        kcal = st.number_input("ต้องการปริมาณพลังงานตั้งแต่ (kcal)", min_value=0)
+        protein = st.number_input("ต้องการปริมาณโปรตีนตั้งแต่ (g)", min_value=0)
+        fat = st.number_input("ต้องการปริมาณไขมันต้องตั้งแต่ (g)", min_value=0)
+        carbohydrate = st.number_input("ต้องการปริมาณคาร์โบไฮเดรตต้องตั้งแต่ (g)", min_value=0)
 
         # แสดงปุ่มเดียว
         button = st.button("ค้นหา")
