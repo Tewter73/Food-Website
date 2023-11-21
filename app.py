@@ -152,7 +152,8 @@ class FoodApp:
         st.markdown('<div class="passage">1. นายปภพ กิตติภิญโญชัย (6634438223)</div>', unsafe_allow_html=True)
         st.markdown('<div class="passage">2. นายคุณานนต์ โสภาเจริญ (6634406123)</div>', unsafe_allow_html=True)
         st.markdown('<div class="passage">3. นายกีรติ แก้วโนนตุ่น (6634405523)</div>', unsafe_allow_html=True)
-
+        st.markdown('<div class="subheader">แหล่งอ้างอิงข้อมูลอาหาร : </div>', unsafe_allow_html=True)
+        st.markdown('<div class="passage"><a href="https://nutrition2.anamai.moph.go.th/th/thai-food-composition-table">ตารางแสดงคุณค่าทางโภชนาการอาหารไทย 2561 NUTRITIVE VALUES OF THAI FOODS</a>', unsafe_allow_html=True)
     def search_food_page(self):
         st.title("โปรดเลือกประเภทของเมนูอาหาร")
         food_type = st.radio("เลือกประเภทอาหาร : ", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
