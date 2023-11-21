@@ -15,6 +15,9 @@ st.sidebar.subheader("โปรดเลือก : ")
 
 selected_page = st.sidebar.selectbox("ไปยัง", ["หน้าหลัก", "ค้นหาเมนูอาหารทั้งหมด", "สุ่มอาหาร"])
 
+with open("style.css") as source_des:
+    st.markdown(f"<style>{source_des.read()}</style>", unsafe_allow_html=True)
+
 def load_savory_foods(): 
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
@@ -46,7 +49,8 @@ def show_image_and_nutrition(food_id, food_name, category):
 
     try:
         img = Image.open(image_path)
-        st.image(img, caption= None, use_column_width=True)
+        st.image(img, caption= None, use_column_width=False , width= 300)
+        
         food_data = load_food_data_with_nutrition(category)
         for id, name, kcal, protein, fat, carbohydrate in food_data:
             if id == food_id:
