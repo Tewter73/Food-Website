@@ -39,19 +39,19 @@ class StreamlitApp:
 class FoodApp:
     def __init__(self):
         self.selected_page = None
-        self.categories = ["🍔 หน้าหลัก", "🔎 ค้นหาเมนูอาหารทั้งหมด", "🔎 ค้นหาเมนูอาหารตามโภชนาการ", "🔎 ระบบสุ่มอาหาร"]
+        self.categories = ["🏠 หน้าหลัก", "🔎 ค้นหาเมนูอาหารทั้งหมด", "🥗 ค้นหาเมนูอาหารตามโภชนาการ", "🎲 ระบบสุ่มอาหาร"]
         self.database = Database('database.db')
     
     def run(self):
         self.selected_page = st.sidebar.selectbox("ไปยัง : ", self.categories)
 
-        if self.selected_page == "🍔 หน้าหลัก":
+        if self.selected_page == "🏠 หน้าหลัก":
             self.home_page()
         elif self.selected_page == "🔎 ค้นหาเมนูอาหารทั้งหมด":
             self.search_food_page()
-        elif self.selected_page == "🔎 ค้นหาเมนูอาหารตามโภชนาการ":
+        elif self.selected_page == "🥗 ค้นหาเมนูอาหารตามโภชนาการ":
             self.nutritional_food_page()
-        elif self.selected_page == "🔎 ระบบสุ่มอาหาร":
+        elif self.selected_page == "🎲 ระบบสุ่มอาหาร":
             self.random_food_page()
 
     def load_food_data(self, category):
