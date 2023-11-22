@@ -119,7 +119,6 @@ class FoodApp:
         food_data = self.load_food_data(category)
         filtered_food_data = []
         for food_id, food_name, kcal_db, protein_db, fat_db, carbohydrate_db in food_data:
-            # Filtering based on user input
             if (
                 (kcal is None or kcal_db >= kcal)
                 and (protein is None or protein_db >= protein)
