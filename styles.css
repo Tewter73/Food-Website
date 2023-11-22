@@ -7,7 +7,8 @@ html {
 body {
     font-family: 'Kanit', sans-serif;
 }
-.home, .header, .subheader, .passage, .subheader2, .subheader3{
+
+.home, .header, .subheader, .passage, .subheader2, .subheader3 {
     font-family: 'Kanit', sans-serif;
 }
 .home {
@@ -22,24 +23,25 @@ body {
     max-width: 100%;
     margin-bottom: 50px;
 }
-.header{
+
+.header {
     font-size: 40px;
     margin-bottom: 40px;
     color: #0D1282;
 }
 
-.subheader{
+.subheader {
     font-size: 25px;
     margin-bottom: 30px;
     color: #0D1282;
 }
 
-.passage{
+.passage {
     font-size: 20px;
     margin-bottom: 25px;
 }
 
-.subheader2{
+.subheader2 {
     font-size: 50px;
     color: #EEEDED;
     text-align: center;
@@ -52,36 +54,52 @@ body {
     margin-bottom: 50px;
 }
 
-.subheader3{
+.subheader3 {
     font-size: 40px;
     margin-bottom: 40px;
     color: #0D1282;
 }
 
-.menu_topic{
+.menu_topic {
     text-align: center;
     color: white;
     font-size: 20px;
     margin-bottom: 30px;
-    margin-top: 50px;
+    margin-top: 20px;
     width: 100%;
     font-weight: bold;
     background-color: #0D1282;
     border-radius: 10px;
 }
 
-.menu_pic{
+.menu_pic {
     width: 300px;
     border-radius: 20px;
 }
 
-.image{
+.image {
     text-align: center;
 }
 
-div.st-emotion-cache-1v0mbdj.e115fcil1{
+div.st-emotion-cache-1v0mbdj.e115fcil1 {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 75%;
+}  
+.calorie, .protein, .fat, .carbohydrate {
+    font-family: 'Kanit', sans-serif;
+    text-align: center;
+    color: #0D1282;
+}
+div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
+    font-size: 25px;
+    margin-bottom: 10px;
+    color: #0D1282;
+    font-family: 'Kanit', sans-serif;
+}
+.ratio {
+    font-size: px;
+    margin-bottom: 10px;
+    color: #0D1282;
 }

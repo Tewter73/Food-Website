@@ -25,7 +25,8 @@ class StreamlitApp:
 
     def local_css(self, file_name):
         with open(file_name) as f:
-            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+            style = f.read()
+        st.markdown(f"<style>{style}</style>", unsafe_allow_html=True)
 
     def run(self):
         st.set_page_config(
@@ -42,7 +43,7 @@ class FoodApp:
         self.selected_page = None
         self.categories = ["🍔 หน้าหลัก", "🔎 ค้นหาเมนูอาหารทั้งหมด", "🔎 ค้นหาเมนูอาหารตามโภชนาการ", "🔎 ระบบสุ่มอาหาร"]
         self.database = Database('database.db')
-
+    
     def run(self):
         self.selected_page = st.sidebar.selectbox("ไปยัง : ", self.categories)
 
@@ -58,7 +59,7 @@ class FoodApp:
     def load_food_data(self, category):
         query = f"SELECT id, name, kcal, protein, fat, carbohydrate FROM {category};"
         return self.database.execute_query(query)
-
+    
     def load_food_data_with_nutrition(self, category):
         return self.load_food_data(category)
     
@@ -68,31 +69,6 @@ class FoodApp:
         return resized_image
     
     def show_nutrition_info(self, kcal, protein, fat, carbohydrate):
-        st.markdown("""
-            <style>resize
-                @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-                body {
-                    font-family: 'Kanit', sans-serif;
-                   
-                }
-                .calorie, .protein, .fat, .passage, .carbohydrate{
-                    font-family: 'Kanit', sans-serif;
-                    text-align: center;
-                }
-                .calorie {
-                    color: #FF5733;
-                }
-                .protein {
-                    color: #4CAF50;
-                }
-                .fat {
-                    color: #3366FF;
-                }
-                .carbohydrate {
-                    color: #FFC300;
-                }
-            </style>
-        """, unsafe_allow_html=True)
         st.markdown(f'<div class="calorie">ปริมาณพลังงาน (kcal) : {kcal}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="protein">ปริมาณโปรตีน (g) : {protein}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="fat">ปริมาณไขมัน (g) : {fat}</div>', unsafe_allow_html=True)
@@ -116,7 +92,7 @@ class FoodApp:
             st.warning(f'ไม่พบรูปภาพสำหรับ {food_name}')
 
     def show_food_page(self, title, category):
-        st.markdown(f'<div class="subheader">|  {title}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="subheader">| {title}</div>', unsafe_allow_html=True)
         food_data = self.load_food_data_with_nutrition(category)
 
         col1, col2, col3 = st.columns(3)
@@ -174,30 +150,25 @@ class FoodApp:
                         self.show_image_and_nutrition(food_id, food_name, category)
 
     def show_random_food(self, category):
-        st.title("เมนูอาหารสำหรับคุณในมือนี้ ก็คือ !!!")
+        st.markdown('<div class="header">เมนูอาหารสำหรับคุณในมือนี้ ก็คือ !!!</div>', unsafe_allow_html=True)
         food_data = self.load_food_data_with_nutrition(category)
-
         if len(food_data) == 0:
             st.error("ไม่พบเมนูอาหารที่ท่านต้องการครับ")
         else:
             col1, col2, col3 = st.columns(3)
-
             random_food_indexes = random.sample(range(len(food_data)), min(3, len(food_data)))
-
             for index, food_index in enumerate(random_food_indexes):
                 food_id, food_name, *_ = food_data[food_index]
-
                 if index % 3 == 0:
                     with col1:
                         st.markdown(f'<div class="menu_topic">{food_name}</div>', unsafe_allow_html=True)
                         self.show_image_and_nutrition(food_id, food_name, category)
 
     def home_page(self):
-        
         st.markdown('<div class="home">🏠 หน้าหลัก</div>', unsafe_allow_html=True)
         st.markdown('<div class="header">🍔 เกี่ยวกับเว็บไซต์ของเรา</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader">| เหตุผลในการพัฒนา :</div>', unsafe_allow_html=True)
-        st.markdown('<div class="passage">เคยมั้ยครับกับการที่เวลาเราเดินไปที่โรงอาหารแล้วเราไม่รู้จะสั่งเมนูอะไรดี สุดท้ายแล้วเราก็เลือกที่จะสั่งเมนูเดิม ๆ ซึ่งมันทำให้เปลืองเวลาค่อนข้างมากเลยใช่มั้ยล่ะครับ จุดประสงค์ของกลุ่มเราก็คือการมาแก้ปัญหาตรงนั้นครับ</div>', unsafe_allow_html=True)
+        st.markdown('<div class="passage">บางครั้งเมื่อเราออกกำลังกาย และต้องการอยากที่จะคุมอาหารเพื่อสุขภาพที่ดี เราต้องการที่จะทราบถึงปริมาณสารอาหารที่เหมาะสมกับตัวเรา แล้วก็ไม่รู้ว่าแต่ละเมนูมีสารอาหารเท่าไหร่ กลุ่มของพวกเราจึงได้พัฒนาเว็บไซต์ที่ค้นหาอาหารที่บอกปริมาณสารอาหารของอาหารเมนูนั้นด้วยครับ</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader">| รายละเอียดเว็บไซต์</div>', unsafe_allow_html=True)
         st.markdown('<div class="passage">พวกเราได้สร้างเว็บไซต์สำหรับเลือกดูเมนูอาหาร โดยจะเน้นไปที่อาหารไทย ซึ่งเราก็จะสามารถหาดูอาหารพร้อมกับภาพประกอบ และข้อมูลโภชนาการให้เราได้เลือกรับประทานกันได้ง่าย ๆ ครับ</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader">| สมาชิก</div>', unsafe_allow_html=True)
@@ -206,27 +177,11 @@ class FoodApp:
         st.markdown('<div class="passage">3. นายกีรติ แก้วโนนตุ่น (6634405523)</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader">| แหล่งอ้างอิงข้อมูลอาหาร : </div>', unsafe_allow_html=True)
         st.markdown('<div class="passage"><a href="https://nutrition2.anamai.moph.go.th/th/thai-food-composition-table">ตารางแสดงคุณค่าทางโภชนาการอาหารไทย 2561 NUTRITIVE VALUES OF THAI FOODS</a>', unsafe_allow_html=True)
-        
 
     def search_food_page(self):
         st.markdown('<div class="subheader2">🔎 ค้นหาเมนูอาหารทั้งหมด</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader3">💙 โปรดเลือกประเภทของเมนูอาหาร</div>', unsafe_allow_html=True)
-        
         food_type = st.radio("| เลือกประเภทอาหาร : ", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
-        st.markdown(
-            """<style>
-                div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
-                    font-size: 25px;
-                    margin-bottom: 10px;
-                    color: #0D1282;
-                    font-family: 'Kanit', sans-serif;
-                }
-                .ratio {
-                    font-size: px;
-                    margin-bottom: 10px;
-                    color: #0D1282;
-                }
-            </style>""", unsafe_allow_html=True)
         if food_type == "อาหารประเภทของคาว":
             if st.button("ยืนยัน"):
                 self.show_savory_page()
@@ -234,34 +189,15 @@ class FoodApp:
         elif food_type == "อาหารประเภทของหวาน":
             if st.button("ยืนยัน"):
                 self.show_dessert_page()
-        
 
     def nutritional_food_page(self):
         st.markdown('<div class="subheader2">🔎 ค้นหาเมนูอาหารตามโภชนาการ</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader3">💙 โปรดเลือกประเภทของเมนูอาหาร</div>', unsafe_allow_html=True)
-
         food_type = st.radio("| เลือกประเภทอาหาร", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"], key='nutritional_radio')
-        st.markdown(
-            """<style>
-                div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
-                    font-size: 25px;
-                    margin-bottom: 10px;
-                    color: #0D1282;
-                    font-family: 'Kanit', sans-serif;
-                }
-                .ratio {
-                    font-size: px;
-                    margin-bottom: 10px;
-                    color: #0D1282;
-                }
-            </style>""", unsafe_allow_html=True)
-
         if food_type == "อาหารประเภทของคาว":
             category = "savory"
         elif food_type == "อาหารประเภทของหวาน":
             category = "dessert"
-
-        
         kcal = st.number_input("| ต้องการปริมาณพลังงานตั้งแต่ (kcal)", min_value=0)
         protein = st.number_input("| ต้องการปริมาณโปรตีนตั้งแต่ (g)", min_value=0)
         fat = st.number_input("| ต้องการปริมาณไขมันต้องตั้งแต่ (g)", min_value=0)
@@ -274,30 +210,20 @@ class FoodApp:
             margin-bottom: 10px;
             color: #0D1282;
             font-family: 'Kanit', sans-serif;
-            
         }</style>""", unsafe_allow_html=True)
-
         if button:
             self.show_nutritional_food_page(category, kcal, protein, fat, carbohydrate)
-        
+
     def random_food_page(self):
         st.markdown('<div class="subheader2">🔎 ระบบสุ่มอาหาร</div>', unsafe_allow_html=True)
         st.markdown('<div class="subheader3">💙 โปรดเลือกประเภทของเมนูอาหาร</div>', unsafe_allow_html=True)
-        food_type = st.radio("| เลือกประเภทอาหาร", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
-        st.markdown(
-        """<style>
-            div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
-                font-size: 25px;
-                margin-bottom: 10px;
-                color: #0D1282;
-                font-family: 'Kanit', sans-serif;
-            }</style>""", unsafe_allow_html=True)
+        food_type = st.radio("| เลือกประเภทอาหาร :", ["อาหารประเภทของคาว", "อาหารประเภทของหวาน"])
         if food_type == "อาหารประเภทของคาว":
             if st.button("สุ่มเมนู"):
                 self.show_random_food('savory')
         elif food_type == "อาหารประเภทของหวาน":
             if st.button("สุ่มเมนู"):
                 self.show_random_food('dessert')
-
+            
 streamlit_app = StreamlitApp()
 streamlit_app.run()
